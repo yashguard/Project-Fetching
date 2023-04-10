@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  let [ranum,setRanum] = useState(10);
   let [num, setNum] = useState(1);
   let [api, setApi] = useState([]);
   const setNext = () => {
@@ -10,17 +11,19 @@ function App() {
   const setPrev = () => {
     setNum(num === 1 ? 1 : --num);
   };
+  const setRandom = () => {
+    setRanum(Math.trunc(Math.random() * 10))
+  }
   useEffect(() => {
     apiArray();
-  }, [num]);
+  }, [num,ranum]);
   let apiArray = async () => {
     let req = await fetch(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/getrestaurants?limit=10&page=${num}`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/getrestaurants?limit=${ranum}&page=${num}`
     );
     let res = await req.json();
     setApi(res.data);
   };
-  console.log(api);
   return (
     <div className="section">
       {api.map((v, i) => {
@@ -40,6 +43,7 @@ function App() {
       })}
       <button onClick={() => setPrev()}>Prev</button>
       <button onClick={() => setNext()}>Next</button>
+      <button onClick={() => setRandom()}>Update</button>
     </div>
   );
 }
